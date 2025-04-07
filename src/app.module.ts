@@ -1,16 +1,15 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { RegisterController } from './register/interface/http/register.controller';
+import { RegisterService } from './register/business/register/register.service';
 import { ConfigModule } from '@nestjs/config';
-import { ProxyRMQModule } from './proxyRMQ/proxy_rmq,module';
+import { CommonModule } from './common/common,module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({isGlobal: true}),
-    ProxyRMQModule
-
+    CommonModule
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [RegisterController],
+  providers: [RegisterService],
 })
 export class AppModule {}

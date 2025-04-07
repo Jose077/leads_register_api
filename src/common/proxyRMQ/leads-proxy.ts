@@ -1,12 +1,12 @@
 import { Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
-import { ClientProxyFactory, Transport } from "@nestjs/microservices";
+import { ClientProxy, ClientProxyFactory, Transport } from "@nestjs/microservices";
 
 @Injectable()
 export class LeadsProxy {
     constructor(private readonly configService: ConfigService){}
 
-    getLeadsInstance() {
+    getLeadsInstance(): ClientProxy {
         return ClientProxyFactory.create({
             transport: Transport.RMQ,
             options: {
