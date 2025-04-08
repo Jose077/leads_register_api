@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { RegisterService } from '../../business/register/register.service';
-import { CreateLeadDTO } from '../../domain/dtos/create_lead.dto';
+import { CreateLeadDTO } from '../../domain/dtos/create_lead';
 
 @Controller('leads')
 export class RegisterController {
