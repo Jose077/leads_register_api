@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { RegisterModule } from 'src/register/register.module';
 import { RegisterService } from './register.service';
-import { CreateLeadDTO } from 'src/register/domain/dtos/create_lead';
+import { CreateLeadDTO } from 'src/register/dtos/create_lead';
 import { BadRequestException } from '@nestjs/common';
 import { LeadsProxy } from 'src/common/rabbitMQ/proxy/leads';
 
@@ -24,7 +24,7 @@ describe('Register', () => {
     registerService = module.get<RegisterService>(RegisterService);
   });
 
-  it('should throw an error if email and phone are missing', async () => {
+  it('should throw an error if the email and phone are missing', async () => {
     const lead: CreateLeadDTO = {
       name: "test"
     };

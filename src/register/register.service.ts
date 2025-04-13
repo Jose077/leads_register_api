@@ -1,5 +1,5 @@
 import { BadGatewayException, BadRequestException, Injectable, Logger } from '@nestjs/common';
-import { CreateLeadDTO } from '../../domain/dtos/create_lead';
+import { CreateLeadDTO } from './dtos/create_lead';
 import { ClientProxy } from '@nestjs/microservices';
 import { lastValueFrom } from 'rxjs';
 import { LeadsProxy } from 'src/common/rabbitMQ/proxy/leads';
@@ -14,16 +14,26 @@ export class RegisterService {
   }
 
   async createLead(data: CreateLeadDTO): Promise<void> {
-    
     // Should return an error if there is no emial and phone
     if (!data.email && !data.phone) {
       throw new BadRequestException("É necessário informar pelo menos um email ou um número de telefone.")
     }
 
     try {
-      await lastValueFrom(this.leadsRMQInstance.emit('leads_queue', data));
+      await lastValueFrom(this.leadsRMQInstance.emit('create-lead', data));
     } catch (error) {
       this.logger.error('Erro ao enviar mensagem para a fila:', error.stack);
     }
   }
+
+  async onModuleInit() {
+    try {
+      this.logger.log('Testando conexão com RabbitMQ...');
+      await this.leadsRMQInstance.connect()
+      this.logger.log('Conectado ao RabbitMQ com sucesso!');
+    } catch (err) {
+      this.logger.error('Erro ao conectar no RabbitMQ', err.message || err);
+      process.exit(1); 
+    }
+}
 }
