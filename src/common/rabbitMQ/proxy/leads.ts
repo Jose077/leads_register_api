@@ -12,8 +12,10 @@ export class LeadsProxy {
             transport: Transport.RMQ,
             options: {
                 urls: [`amqp://${this.configService.get<string>('RABBITMQ_USER')}:${this.configService.get<string>('RABBITMQ_PASSWORD')}@${this.configService.get<string>('RABBITMQ_URL')}`],    
-                queueOptions: {durable: true},
                 queue: 'leads-queue',
+                queueOptions: {
+                    durable: true
+                },
             }
           })
     }

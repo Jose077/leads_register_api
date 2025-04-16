@@ -1,6 +1,6 @@
 import { BadGatewayException, BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { CreateLeadDTO } from './dtos/create_lead';
-import { ClientProxy } from '@nestjs/microservices';
+import { ClientProxy, RmqRecordBuilder } from '@nestjs/microservices';
 import { lastValueFrom } from 'rxjs';
 import { LeadsProxy } from 'src/common/rabbitMQ/proxy/leads';
 
@@ -20,7 +20,12 @@ export class RegisterService {
     }
 
     try {
-      await lastValueFrom(this.leadsRMQInstance.emit('create-lead', data));
+      const msg = new RmqRecordBuilder(data)
+      .setOptions({
+        persistent: true,
+      })
+      .build();
+      await lastValueFrom(this.leadsRMQInstance.emit('create-lead', msg));
     } catch (error) {
       this.logger.error('Erro ao enviar mensagem para a fila:', error.stack);
     }
