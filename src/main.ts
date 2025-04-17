@@ -8,7 +8,7 @@ const appPort = configService.get<number>('APP_PORT') || 3000
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule)
-  await app.listen(appPort);
+  await app.listen(appPort, '0.0.0.0');
   Logger.log(`Server is running on port: ${appPort}`);
 }
 bootstrap();
